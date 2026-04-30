@@ -1,17 +1,16 @@
-import { FormEvent, useState } from 'react';
 import { Mail, Lock } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../constants/RouteConstants';
+import { useLoginPage } from './hooks/useLoginPage';
 
 export function LoginPage() {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    navigate(ROUTES.DASHBOARD);
-  };
+  const {
+    email,
+    password,
+    isLoading,
+    error,
+    setEmail,
+    setPassword,
+    handleSubmit,
+  } = useLoginPage();
 
   return (
     <>
@@ -59,7 +58,13 @@ export function LoginPage() {
           </div>
         </label>
 
-        <button type="submit" className="btn btn-primary w-full mt-2">
+        {error && <p className="text-sm text-error">{error}</p>}
+
+        <button
+          type="submit"
+          className="btn btn-primary w-full mt-2"
+          disabled={isLoading}
+        >
           Sign In
         </button>
       </form>

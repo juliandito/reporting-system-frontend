@@ -8,8 +8,10 @@ import {
   ChevronRight,
   BarChart3,
   Menu,
+  LogOut,
 } from 'lucide-react';
 import { ROUTES } from '../constants/RouteConstants';
+import { useAuthStore } from '../store/useAuthStore';
 
 interface NavItem {
   to: string;
@@ -38,6 +40,12 @@ const navItems: NavItem[] = [
 export function DashboardLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+  const { logout, user } = useAuthStore();
+
+  const handleLogout = () => {
+    logout();
+    navigate(ROUTES.LOGIN, { replace: true });
+  };
 
   return (
     <div className="min-h-screen flex bg-base-100">
@@ -106,6 +114,15 @@ export function DashboardLayout() {
             <Menu size={20} />
           </button>
           <div className="flex-1" />
+          {user && (
+            <div className="hidden sm:block text-sm text-base-content/70">
+              {user.name}
+            </div>
+          )}
+          <button className="btn btn-ghost btn-sm" onClick={handleLogout}>
+            <LogOut size={16} />
+            <span>Logout</span>
+          </button>
           <div className="text-sm text-base-content/60">
             BPH Migas Reporting System
           </div>

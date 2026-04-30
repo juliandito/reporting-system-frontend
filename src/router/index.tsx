@@ -7,6 +7,8 @@ import { ReportsPage } from '../pages/reports/ReportsPage';
 import { ReportDetailPage } from '../pages/reports/ReportDetailPage';
 import { LoginPage } from '../pages/auth/LoginPage';
 import { ROUTES } from '../constants/RouteConstants';
+import { RequireAuth } from './RequireAuth';
+import { PublicOnlyRoute } from './PublicOnlyRoute';
 
 export const router = createBrowserRouter([
   {
@@ -15,7 +17,11 @@ export const router = createBrowserRouter([
   },
   {
     path: ROUTES.LOGIN,
-    element: <AuthLayout />,
+    element: (
+      <PublicOnlyRoute>
+        <AuthLayout />
+      </PublicOnlyRoute>
+    ),
     children: [
       {
         index: true,
@@ -25,7 +31,11 @@ export const router = createBrowserRouter([
   },
   {
     path: '/dashboard',
-    element: <DashboardLayout />,
+    element: (
+      <RequireAuth>
+        <DashboardLayout />
+      </RequireAuth>
+    ),
     children: [
       {
         index: true,
