@@ -136,8 +136,8 @@ VITE_API_BASE_URL=http://localhost:8080/api
 ## Development
 
 ```bash
-npm run dev      # Start dev server (http://localhost:5173)
-npm run build    # Production build
-npm run lint     # ESLint check
-npm run preview  # Preview production build
+yarn dev      # Start dev server (http://localhost:5173)
+yarn build    # Production build
+yarn lint     # ESLint check
+yarn preview  # Preview production build
 ```
