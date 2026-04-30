@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as XLSX from 'xlsx';
+import { readSheet, type CellValue } from 'read-excel-file/browser';
 import { useReportStore } from '../../../store/useReportStore';
 import { ROUTES } from '../../../constants/RouteConstants';
 
@@ -16,25 +16,22 @@ export function useUploadPage() {
   const [file, setFile] = useState<File | null>(null);
   const [previewData, setPreviewData] = useState<SheetPreviewData | null>(null);
 
-  const parsePreview = useCallback((f: File) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const data = e.target?.result;
-      if (!data) return;
-      const workbook = XLSX.read(data, { type: 'binary' });
-      const sheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json<(string | number)[]>(worksheet, {
-        header: 1,
-      });
-      const [headers, ...rows] = jsonData as (string | number)[][];
+  const parsePreview = useCallback(async (f: File) => {
+    try {
+      const rows = await readSheet(f);
+      const [headerRow, ...dataRows] = rows;
       setPreviewData({
-        headers: headers?.map(String) ?? [],
-        rows: rows.slice(0, 5),
-        sheetName,
+        headers: (headerRow ?? []).map(String),
+        rows: dataRows.slice(0, 5).map((row) =>
+          row.map((cell: CellValue | null) =>
+            cell instanceof Date ? cell.toLocaleDateString() : (cell as string | number) ?? ''
+          )
+        ),
+        sheetName: f.name.replace(/\.[^.]+$/, ''),
       });
-    };
-    reader.readAsBinaryString(f);
+    } catch {
+      // silently ignore parse errors — the file will still upload
+    }
   }, []);
 
   const handleFileSelect = useCallback(
