@@ -123,9 +123,6 @@ export function DashboardLayout() {
             <LogOut size={16} />
             <span>Logout</span>
           </button>
-          <div className="text-sm text-base-content/60">
-            BPH Migas Reporting System
-          </div>
         </header>
 
         {/* Page content */}

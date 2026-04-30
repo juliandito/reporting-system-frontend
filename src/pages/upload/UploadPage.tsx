@@ -7,6 +7,7 @@ export function UploadPage() {
   const {
     file,
     previewData,
+    templateId,
     isLoading,
     error,
     handleFileSelect,
@@ -29,6 +30,12 @@ export function UploadPage() {
         </div>
       )}
 
+      {!templateId && (
+        <div className="alert alert-warning">
+          <span>Set VITE_TEMPLATE_ID (or VITE_REPORT_TEMPLATE_ID) to upload reports.</span>
+        </div>
+      )}
+
       {!file ? (
         <FileUploadZone onFileSelect={handleFileSelect} />
       ) : (
@@ -38,7 +45,7 @@ export function UploadPage() {
             <button
               className="btn btn-primary gap-2"
               onClick={handleUpload}
-              disabled={isLoading}
+              disabled={isLoading || !templateId}
             >
               {isLoading ? <LoadingSpinner size="sm" /> : null}
               {isLoading ? 'Uploading...' : 'Upload & Generate Charts'}

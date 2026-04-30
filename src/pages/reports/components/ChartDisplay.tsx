@@ -41,18 +41,18 @@ const DEFAULT_COLORS = [
 ];
 
 export function ChartDisplay({ chart }: ChartDisplayProps) {
+  const isCircularChart = chart.type === 'pie' || chart.type === 'doughnut';
+
   const chartData = {
     labels: chart.labels,
-    datasets: [
-      {
-        label: chart.datasetLabel,
-        data: chart.data,
-        backgroundColor: chart.backgroundColor ?? DEFAULT_COLORS,
-        borderColor: chart.borderColor ?? '#102A83',
-        borderWidth: 2,
-        fill: false,
-      },
-    ],
+    datasets: chart.datasets.map((dataset, index) => ({
+      label: dataset.name,
+      data: dataset.data,
+      backgroundColor: dataset.backgroundColor ?? (isCircularChart ? DEFAULT_COLORS : DEFAULT_COLORS[index % DEFAULT_COLORS.length]),
+      borderColor: dataset.borderColor ?? DEFAULT_COLORS[index % DEFAULT_COLORS.length],
+      borderWidth: 2,
+      fill: false,
+    })),
   };
 
   const options = {

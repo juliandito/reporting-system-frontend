@@ -9,7 +9,7 @@ interface ReportState {
   error: string | null;
   fetchReports: () => Promise<void>;
   fetchReportById: (id: string) => Promise<void>;
-  uploadReport: (file: File) => Promise<string>;
+  uploadReport: (file: File, templateId?: string) => Promise<string>;
   deleteReport: (id: string) => Promise<void>;
   setSelectedReport: (report: IReport | null) => void;
   clearError: () => void;
@@ -41,10 +41,13 @@ export const useReportStore = create<ReportState>((set, get) => ({
     }
   },
 
-  uploadReport: async (file: File) => {
+  uploadReport: async (file: File, templateId?: string) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await reportService.uploadFile(file);
+      const response = await reportService.uploadFile(file, templateId);
+      if (!response.reportId) {
+        throw new Error('Missing report id in upload response');
+      }
       await get().fetchReports();
       set({ isLoading: false });
       return response.reportId;

@@ -13,6 +13,7 @@ export interface SheetPreviewData {
 export function useUploadPage() {
   const navigate = useNavigate();
   const { uploadReport, error, clearError, isLoading } = useReportStore();
+  const templateId = import.meta.env.VITE_TEMPLATE_ID || import.meta.env.VITE_REPORT_TEMPLATE_ID || 'f277e07f-0788-4305-9adf-299aed73fb71';
   const [file, setFile] = useState<File | null>(null);
   const [previewData, setPreviewData] = useState<SheetPreviewData | null>(null);
 
@@ -45,13 +46,14 @@ export function useUploadPage() {
 
   const handleUpload = useCallback(async () => {
     if (!file) return;
+    if (!templateId) return;
     try {
-      const reportId = await uploadReport(file);
+      const reportId = await uploadReport(file, templateId);
       navigate(ROUTES.REPORT_DETAIL.replace(':id', reportId));
     } catch {
       // error is handled in store
     }
-  }, [file, uploadReport, navigate]);
+  }, [file, uploadReport, templateId, navigate]);
 
   const handleReset = useCallback(() => {
     setFile(null);
@@ -62,6 +64,7 @@ export function useUploadPage() {
   return {
     file,
     previewData,
+    templateId,
     isLoading,
     error,
     handleFileSelect,

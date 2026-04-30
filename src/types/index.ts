@@ -2,6 +2,10 @@ export interface IReport {
   id: string;
   name: string;
   description?: string;
+  fileName?: string;
+  filePath?: string;
+  fileSize?: number;
+  mimeType?: string;
   createdAt: string;
   updatedAt: string;
   charts: IChart[];
@@ -10,15 +14,17 @@ export interface IReport {
 
 export interface IChart {
   id: string;
-  reportId: string;
   title: string;
   type: TChartType;
-  datasetLabel: string;
   labels: string[];
+  datasets: IChartDataset[];
+}
+
+export interface IChartDataset {
+  name: string;
   data: number[];
   backgroundColor?: string[];
   borderColor?: string;
-  createdAt: string;
 }
 
 export interface IUploadResponse {
@@ -50,5 +56,61 @@ export interface IApiResponse<T> {
   data: T;
 }
 
-export type TReportStatus = 'draft' | 'published' | 'archived';
+export interface IReportListResponse {
+  success: boolean;
+  message: string;
+  data: IReportApiItem[];
+  meta?: {
+    page: number;
+    limit: number;
+    total: number;
+    total_pages: number;
+  };
+}
+
+export interface IReportDetailResponse {
+  success: boolean;
+  message: string;
+  data: IReportApiItem;
+}
+
+export interface IUploadApiResponse {
+  success: boolean;
+  message: string;
+  data: {
+    report_id?: string;
+    id?: string;
+    reportId?: string;
+  };
+}
+
+export interface IReportApiItem {
+  id: string;
+  user_id?: string;
+  template_id?: string;
+  file_name?: string;
+  original_name?: string;
+  file_path?: string;
+  file_size?: number;
+  mime_type?: string;
+  status: string;
+  processed_data?: {
+    charts?: IApiChart[];
+  };
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IApiChart {
+  id: string;
+  type: TChartType;
+  title: string;
+  labels: string[];
+  datasets: Array<{
+    name: string;
+    data: number[];
+  }>;
+}
+
+export type TReportStatus = 'draft' | 'published' | 'archived' | 'completed' | 'processing' | 'failed';
 export type TChartType = 'bar' | 'line' | 'pie' | 'doughnut' | 'radar';

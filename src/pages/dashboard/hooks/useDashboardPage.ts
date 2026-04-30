@@ -18,8 +18,8 @@ export function useDashboardPage() {
 
   const stats: DashboardStats = useMemo(() => ({
     totalReports: reports.length,
-    publishedReports: reports.filter((r) => r.status === 'published').length,
-    draftReports: reports.filter((r) => r.status === 'draft').length,
+    publishedReports: reports.filter((r) => r.status === 'published' || r.status === 'completed').length,
+    draftReports: reports.filter((r) => r.status === 'draft' || r.status === 'processing').length,
     totalCharts: reports.reduce((acc, r) => acc + (r.charts?.length ?? 0), 0),
   }), [reports]);
 
