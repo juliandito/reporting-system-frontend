@@ -7,7 +7,7 @@ A React TypeScript single-page application (SPA) for viewing and managing report
 
 | Package | Version | Purpose |
 |---|---|---|
-| React | ^19 | UI framework |
+| React | ^19.2.5 | UI framework |
 | TypeScript | ~6.x | Type safety |
 | Vite | ^8 | Build tool / dev server |
 | React Router DOM | ^7 | Client-side routing |
