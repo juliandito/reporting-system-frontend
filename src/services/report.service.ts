@@ -1,14 +1,5 @@
-import axios from 'axios';
 import type { IReport, IUploadResponse } from '../types';
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api';
-
-const apiClient = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
+import { apiClient } from './api';
 
 export const reportService = {
   uploadFile: async (file: File): Promise<IUploadResponse> => {
