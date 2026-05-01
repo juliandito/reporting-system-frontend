@@ -1,11 +1,12 @@
 import type {
   IApiChart,
+  IGenerateReportRequest,
   IReport,
   IReportApiItem,
   IReportDetailResponse,
   IReportListResponse,
   IUploadApiResponse,
-  IUploadResponse,
+  IUploadWithColumnsResponse,
   TReportStatus,
 } from '../types';
 import { apiClient } from './api';
@@ -46,12 +47,9 @@ const mapReport = (report: IReportApiItem): IReport => ({
 });
 
 export const reportService = {
-  uploadFile: async (file: File, templateId?: string): Promise<IUploadResponse> => {
+  uploadFile: async (file: File): Promise<IUploadWithColumnsResponse> => {
     const formData = new FormData();
     formData.append('file', file);
-    if (templateId) {
-      formData.append('template_id', templateId);
-    }
 
     const response = await apiClient.post<IUploadApiResponse>(REPORTS_ENDPOINT, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
@@ -59,6 +57,7 @@ export const reportService = {
     const reportId = response.data.data.report_id ?? response.data.data.id ?? response.data.data.reportId ?? '';
     return {
       reportId,
+      columns: response.data.data.columns ?? [],
       message: response.data.message,
     };
   },
@@ -82,5 +81,13 @@ export const reportService = {
 
   deleteReport: async (id: string): Promise<void> => {
     await apiClient.delete(`${REPORTS_ENDPOINT}/${id}`);
+  },
+
+  generateReport: async (id: string, config: IGenerateReportRequest): Promise<IReport> => {
+    const response = await apiClient.post<IReportDetailResponse>(
+      `${REPORTS_ENDPOINT}/${id}/generate`,
+      config
+    );
+    return mapReport(response.data.data);
   },
 };

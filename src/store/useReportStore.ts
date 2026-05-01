@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { reportService } from '../services/report.service';
-import type { IReport } from '../types';
+import type { IGenerateReportRequest, IReport } from '../types';
 
 interface ReportState {
   reports: IReport[];
@@ -9,13 +9,14 @@ interface ReportState {
   error: string | null;
   fetchReports: () => Promise<void>;
   fetchReportById: (id: string) => Promise<void>;
-  uploadReport: (file: File, templateId?: string) => Promise<string>;
+  uploadReport: (file: File) => Promise<{ reportId: string; columns: string[] }>;
+  generateReport: (id: string, config: IGenerateReportRequest) => Promise<string>;
   deleteReport: (id: string) => Promise<void>;
   setSelectedReport: (report: IReport | null) => void;
   clearError: () => void;
 }
 
-export const useReportStore = create<ReportState>((set, get) => ({
+export const useReportStore = create<ReportState>((set) => ({
   reports: [],
   selectedReport: null,
   isLoading: false,
@@ -41,18 +42,32 @@ export const useReportStore = create<ReportState>((set, get) => ({
     }
   },
 
-  uploadReport: async (file: File, templateId?: string) => {
+  uploadReport: async (file: File) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await reportService.uploadFile(file, templateId);
+      const response = await reportService.uploadFile(file);
       if (!response.reportId) {
         throw new Error('Missing report id in upload response');
       }
-      await get().fetchReports();
       set({ isLoading: false });
-      return response.reportId;
+      return { reportId: response.reportId, columns: response.columns };
     } catch (error) {
       set({ error: 'Failed to upload file', isLoading: false });
+      throw error;
+    }
+  },
+
+  generateReport: async (id: string, config: IGenerateReportRequest) => {
+    set({ isLoading: true, error: null });
+    try {
+      const report = await reportService.generateReport(id, config);
+      set((state) => ({
+        reports: [report, ...state.reports.filter((r) => r.id !== report.id)],
+        isLoading: false,
+      }));
+      return report.id;
+    } catch (error) {
+      set({ error: 'Failed to generate report', isLoading: false });
       throw error;
     }
   },

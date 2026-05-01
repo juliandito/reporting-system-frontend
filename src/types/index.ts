@@ -32,6 +32,25 @@ export interface IUploadResponse {
   message: string;
 }
 
+export interface IUploadWithColumnsResponse {
+  reportId: string;
+  columns: string[];
+  message: string;
+}
+
+export interface IWizardChartConfig {
+  title: string;
+  type: TChartType;
+  x_axis: string;
+  y_axis: string;
+  aggregation: 'sum' | 'avg' | 'count' | 'max' | 'min';
+}
+
+export interface IGenerateReportRequest {
+  template_name?: string;
+  charts: IWizardChartConfig[];
+}
+
 export interface IUser {
   id: string;
   name: string;
@@ -81,6 +100,8 @@ export interface IUploadApiResponse {
     report_id?: string;
     id?: string;
     reportId?: string;
+    columns?: string[];
+    status?: string;
   };
 }
 
