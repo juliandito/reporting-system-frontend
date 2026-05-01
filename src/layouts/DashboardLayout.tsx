@@ -65,7 +65,7 @@ export function DashboardLayout() {
           </div>
           {!collapsed && (
             <div className="overflow-hidden">
-              <p className="font-bold text-sm leading-tight">BPH Migas</p>
+              <p className="font-bold text-sm leading-tight">Auto Account</p>
               <p className="text-xs opacity-70">Reporting System</p>
             </div>
           )}
