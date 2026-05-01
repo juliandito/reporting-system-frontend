@@ -32,19 +32,37 @@ const mapChart = (chart: IApiChart) => ({
   })),
 });
 
-const mapReport = (report: IReportApiItem): IReport => ({
-  id: report.id,
-  name: report.original_name ?? report.file_name ?? `Report ${report.id}`,
-  description: undefined,
-  fileName: report.file_name,
-  filePath: report.file_path,
-  fileSize: report.file_size,
-  mimeType: report.mime_type,
-  status: normalizeStatus(report.status),
-  charts: report.processed_data?.charts?.map(mapChart) ?? [],
-  createdAt: report.created_at,
-  updatedAt: report.updated_at,
-});
+const mapReport = (report: IReportApiItem): IReport => {
+  const chartCount =
+    report.chart_definition?.length ?? report.processed_data?.charts?.length ?? 0;
+  const derivedStatus: TReportStatus = report.status
+    ? normalizeStatus(report.status)
+    : chartCount > 0
+      ? 'completed'
+      : 'processing';
+
+  return {
+    id: report.id,
+    name: report.name ?? report.original_name ?? report.file_name ?? `Report ${report.id}`,
+    description: report.description,
+    fileName: report.file_name,
+    filePath: report.file_path,
+    fileSize: report.file_size,
+    mimeType: report.mime_type,
+    status: derivedStatus,
+    chartCount,
+    charts: report.processed_data?.charts?.map(mapChart) ?? [],
+    processedData: report.processed_data
+      ? {
+          summary: report.processed_data.summary ?? { total_rows: 0, columns: [] },
+          rows: report.processed_data.rows ?? [],
+          charts: report.processed_data.charts ?? [],
+        }
+      : undefined,
+    createdAt: report.created_at,
+    updatedAt: report.updated_at,
+  };
+};
 
 export const reportService = {
   uploadFile: async (file: File): Promise<IUploadWithColumnsResponse> => {

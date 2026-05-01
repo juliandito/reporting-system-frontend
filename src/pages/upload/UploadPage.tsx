@@ -17,6 +17,7 @@ export function UploadPage() {
     activeChartIndex,
     isLoading,
     error,
+    description,
     handleFileSelect,
     handleNextToChartBuilder,
     handleAddChart,
@@ -27,6 +28,7 @@ export function UploadPage() {
     handleReset,
     handleBackToPreview,
     setTemplateName,
+    setDescription,
   } = useUploadPage();
 
   return (
@@ -77,8 +79,10 @@ export function UploadPage() {
           charts={charts}
           activeChartIndex={activeChartIndex}
           templateName={templateName}
+          description={description}
           isLoading={isLoading}
           onTemplateNameChange={setTemplateName}
+          onDescriptionChange={setDescription}
           onAddChart={handleAddChart}
           onUpdateChart={handleUpdateChart}
           onRemoveChart={handleRemoveChart}

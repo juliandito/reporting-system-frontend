@@ -31,6 +31,7 @@ export function useUploadPage() {
   const [reportId, setReportId] = useState<string | null>(null);
   const [columns, setColumns] = useState<string[]>([]);
   const [templateName, setTemplateName] = useState('');
+  const [description, setDescription] = useState('');
   const [charts, setCharts] = useState<IWizardChartConfig[]>([]);
   const [activeChartIndex, setActiveChartIndex] = useState<number | null>(null);
 
@@ -113,7 +114,8 @@ export function useUploadPage() {
     setStep(4);
     try {
       const id = await generateReport(reportId, {
-        template_name: templateName || undefined,
+        name: templateName || undefined,
+        description: description || undefined,
         charts,
       });
       navigate(ROUTES.REPORT_DETAIL.replace(':id', id));
@@ -121,7 +123,7 @@ export function useUploadPage() {
       // error handled in store; go back to step 3
       setStep(3);
     }
-  }, [reportId, charts, templateName, generateReport, navigate]);
+  }, [reportId, charts, templateName, description, generateReport, navigate]);
 
   // Reset all state
   const handleReset = useCallback(() => {
@@ -131,6 +133,7 @@ export function useUploadPage() {
     setReportId(null);
     setColumns([]);
     setTemplateName('');
+    setDescription('');
     setCharts([]);
     setActiveChartIndex(null);
     clearError();
@@ -152,6 +155,7 @@ export function useUploadPage() {
     activeChartIndex,
     isLoading,
     error,
+    description,
     handleFileSelect,
     handleNextToChartBuilder,
     handleAddChart,
@@ -162,5 +166,6 @@ export function useUploadPage() {
     handleReset,
     handleBackToPreview,
     setTemplateName,
+    setDescription
   };
 }

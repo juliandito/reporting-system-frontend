@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, BarChart3 } from 'lucide-react';
+import { ArrowLeft, BarChart3, Table2 } from 'lucide-react';
 import { useReportStore } from '../../store/useReportStore';
 import { LoadingSpinner, Badge } from '../../components/ui';
 import { ChartDisplay } from './components/ChartDisplay';
@@ -62,6 +62,40 @@ export function ReportDetailPage() {
           {selectedReport.charts.map((chart) => (
             <ChartDisplay key={chart.id} chart={chart} />
           ))}
+        </div>
+      )}
+
+      {selectedReport.processedData?.rows && selectedReport.processedData.rows.length > 0 && (
+        <div className="card bg-base-100 border border-base-200 shadow-sm">
+          <div className="card-body">
+            <div className="flex items-center gap-2 mb-4">
+              <Table2 size={20} className="text-primary" />
+              <h2 className="text-lg font-semibold text-neutral">Source Data</h2>
+              <span className="badge badge-ghost badge-sm ml-1">
+                {selectedReport.processedData.summary.total_rows} rows
+              </span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="table table-zebra table-sm w-full">
+                <thead>
+                  <tr>
+                    {selectedReport.processedData.summary.columns.map((col) => (
+                      <th key={col} className="whitespace-nowrap">{col}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedReport.processedData.rows.map((row, i) => (
+                    <tr key={i}>
+                      {selectedReport.processedData!.summary.columns.map((col) => (
+                        <td key={col}>{row[col] ?? '—'}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       )}
     </div>

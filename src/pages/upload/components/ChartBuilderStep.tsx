@@ -7,8 +7,10 @@ interface ChartBuilderStepProps {
   charts: IWizardChartConfig[];
   activeChartIndex: number | null;
   templateName: string;
+  description: string;
   isLoading: boolean;
   onTemplateNameChange: (name: string) => void;
+  onDescriptionChange: (description: string) => void;
   onAddChart: () => void;
   onUpdateChart: (index: number, partial: Partial<IWizardChartConfig>) => void;
   onRemoveChart: (index: number) => void;
@@ -36,8 +38,10 @@ export function ChartBuilderStep({
   charts,
   activeChartIndex,
   templateName,
+  description,
   isLoading,
   onTemplateNameChange,
+  onDescriptionChange,
   onAddChart,
   onUpdateChart,
   onRemoveChart,
@@ -80,6 +84,20 @@ export function ChartBuilderStep({
           value={templateName}
           onChange={(e) => onTemplateNameChange(e.target.value)}
           placeholder="e.g. Salary Report Q1"
+          className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
+          style={{ borderColor: '#E0E0E0', color: '#333333' }}
+        />
+      </div>
+
+      {/* Description */}
+      <div className="mb-6">
+        <label className="block text-sm font-bold mb-1" style={{ color: '#333333' }}>
+          Description
+        </label>
+        <textarea
+          value={description}
+          onChange={(e) => onDescriptionChange(e.target.value)}
+          placeholder="e.g. This report shows the salary distribution for Q1"
           className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2"
           style={{ borderColor: '#E0E0E0', color: '#333333' }}
         />

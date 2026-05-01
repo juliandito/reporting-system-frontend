@@ -1,3 +1,12 @@
+export interface IProcessedReport {
+  summary: {
+    total_rows: number;
+    columns: string[];
+  };
+  rows: Record<string, string>[];
+  charts: IApiChart[];
+}
+
 export interface IReport {
   id: string;
   name: string;
@@ -9,7 +18,9 @@ export interface IReport {
   createdAt: string;
   updatedAt: string;
   charts: IChart[];
+  chartCount: number;
   status: TReportStatus;
+  processedData?: IProcessedReport;
 }
 
 export interface IChart {
@@ -47,7 +58,8 @@ export interface IWizardChartConfig {
 }
 
 export interface IGenerateReportRequest {
-  template_name?: string;
+  name?: string;
+  description?: string;
   charts: IWizardChartConfig[];
 }
 
@@ -105,17 +117,35 @@ export interface IUploadApiResponse {
   };
 }
 
+export interface IChartSpec {
+  id: string;
+  type: string;
+  title: string;
+  label_field?: string;
+  group_by: string;
+  aggregate: string;
+  series: { name: string; field: string }[];
+}
+
 export interface IReportApiItem {
   id: string;
   user_id?: string;
   template_id?: string;
+  name?: string;
+  description?: string;
   file_name?: string;
   original_name?: string;
   file_path?: string;
   file_size?: number;
   mime_type?: string;
-  status: string;
+  status?: string;
+  chart_definition?: IChartSpec[];
   processed_data?: {
+    summary?: {
+      total_rows: number;
+      columns: string[];
+    };
+    rows?: Record<string, string>[];
     charts?: IApiChart[];
   };
   created_at: string;

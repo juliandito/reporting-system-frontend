@@ -23,7 +23,7 @@ export function ReportTable({ reports, isLoading, onDelete }: ReportTableProps) 
     {
       key: 'charts',
       header: 'Charts',
-      render: (row) => <span className="badge badge-outline">{row.charts?.length ?? 0}</span>,
+      render: (row) => <span className="badge badge-outline">{row.chartCount}</span>,
     },
     {
       key: 'status',
