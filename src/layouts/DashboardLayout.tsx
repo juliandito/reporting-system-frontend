@@ -48,7 +48,7 @@ export function DashboardLayout() {
   };
 
   return (
-    <div className="min-h-screen flex bg-base-100">
+    <div className="min-h-screen w-full flex bg-base-100">
       {/* Sidebar */}
       <aside
         className={`flex flex-col bg-primary text-primary-content transition-all duration-300 ${

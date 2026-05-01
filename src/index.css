@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Override DaisyUI's scrollbar-gutter: stable injected on modal open,
+   which reserves a 15px gutter and shifts the layout. */
+:root:has(:is(.modal-open, .modal:target, .modal-toggle:checked + .modal, .modal[open])) {
+  scrollbar-gutter: auto;
+}
