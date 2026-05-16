@@ -119,7 +119,7 @@ export function DashboardLayout() {
               {user.name}
             </div>
           )}
-          <button className="btn btn-ghost btn-sm" onClick={handleLogout}>
+          <button className="btn btn-ghost btn-sm text-red-500" onClick={handleLogout}>
             <LogOut size={16} />
             <span>Logout</span>
           </button>

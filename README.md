@@ -1,73 +1,117 @@
-# React + TypeScript + Vite
+# Reporting System Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The main purpose of this app is to let users upload Excel files, inspect a preview of the data, choose how charts should be configured, and generate a visual report from that dataset.
 
-Currently, two official plugins are available:
+Core flow:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Login to access the dashboard.
+2. Upload an Excel file.
+3. Preview sheet data and detected columns.
+4. Configure one or more charts.
+5. Generate a report and view the final chart output.
 
-## React Compiler
+## Main Features & Highlight
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Excel file upload with client-side preview.
+- Configurable chart builder for report generation.
+- Report list and report detail pages.
+- Dashboard overview for recent reporting activity.
+- Auth-protected routes for internal/admin usage.
+- Centralized state management with Zustand.
 
-## Expanding the ESLint configuration
+This project highlights:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Building a structured SPA with protected and public routes.
+- Designing a multi-step data processing workflow.
+- Integrating frontend state with backend APIs.
+- Rendering configurable charts from uploaded tabular data.
+- Organizing a React codebase into reusable components, hooks, services, and stores.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- React 19
+- TypeScript
+- Vite
+- React Router
+- Zustand
+- Axios
+- Chart.js with react-chartjs-2
+- Tailwind CSS and DaisyUI
+- read-excel-file
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
+
+```text
+src/
+  components/
+    ui/                  Reusable UI building blocks
+  constants/             App-wide constants and route definitions
+  layouts/               Auth and dashboard layout shells
+  pages/
+    auth/                Login page and auth hook
+    dashboard/           Dashboard overview and stats
+    reports/             Report list and report detail pages
+    upload/              Excel upload, preview, processing, chart builder
+  router/                Route config and auth guards
+  services/              API service layer
+  store/                 Zustand stores for auth and reports
+  types/                 Shared TypeScript types
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## How It Works
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The upload flow is implemented as a step-based experience:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Step 1: Select an Excel file.
+- Step 2: Parse and preview the sheet data.
+- Step 3: Upload the file, retrieve available columns, and configure charts.
+- Step 4: Generate the final report and open the detail page.
+
+This makes the app suitable for business reporting scenarios where raw spreadsheet data needs to be converted into visual summaries without manual chart creation in Excel.
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20+ recommended
+- npm or yarn
+
+### Install
+
+```bash
+npm install
 ```
+
+### Run Development Server
+
+```bash
+npm run dev
+```
+
+### Build for Production
+
+```bash
+npm run build
+```
+
+### Lint
+
+```bash
+npm run lint
+```
+
+## Environment
+
+Create a `.env` file if needed:
+
+```env
+VITE_API_BASE_URL=http://localhost:8080/api
+```
+
+## Example Use Case
+
+A user uploads a monthly Excel report, selects which columns should be used for the x-axis and y-axis, chooses chart types such as bar or line, and generates a report page that visualizes the uploaded dataset.
+
+## Status
+
+This project is a frontend implementation focused on report visualization and configurable chart generation from Excel-based data sources.
