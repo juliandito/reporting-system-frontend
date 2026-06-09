@@ -1,4 +1,4 @@
-# AGENTS.md — BPH Migas Reporting System Frontend
+# AGENTS.md — Reporting System Frontend
 
 ## Project Overview
 A React TypeScript single-page application (SPA) for viewing and managing reporting data from an Excel upload pipeline. Built with Vite, React Router v6, Zustand, Tailwind CSS + DaisyUI, and Chart.js.
